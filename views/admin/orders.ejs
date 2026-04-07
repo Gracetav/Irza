@@ -37,15 +37,25 @@
                             <% } %>
                         </td>
                         <td>
-                            <form action="/admin/orders/status" method="POST" style="margin: 0;">
-                                <input type="hidden" name="order_id" value="<%= order.id %>">
-                                <select name="status" id="status" style="width: auto; padding: 0.5rem; margin: 0;" onchange="this.form.submit()">
-                                    <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
-                                    <option value="confirmed" <%= order.status === 'confirmed' ? 'selected' : '' %>>Confirm</option>
-                                    <option value="rejected" <%= order.status === 'rejected' ? 'selected' : '' %>>Reject</option>
-                                </select>
-                            </form>
+                            <% if (order.status === 'pending') { %>
+                                <form action="/admin/orders/status" method="POST" style="display: flex; gap: 0.5rem; margin: 0;">
+                                    <input type="hidden" name="order_id" value="<%= order.id %>">
+                                    <button type="submit" name="status" value="confirmed" class="btn-success" style="padding: 0.5rem; font-size: 0.8rem;">Confirm</button>
+                                    <button type="submit" name="status" value="rejected" class="btn-danger" style="padding: 0.5rem; font-size: 0.8rem;">Reject</button>
+                                </form>
+                            <% } else if (order.status === 'confirmed') { %>
+                                <form action="/admin/orders/status" method="POST" style="margin: 0;">
+                                    <input type="hidden" name="order_id" value="<%= order.id %>">
+                                    <input type="hidden" name="status" value="shipped">
+                                    <button type="submit" class="btn-success" style="padding: 0.5rem; font-size: 0.8rem; background-color: #007bff;">Barang sudah dikirim</button>
+                                </form>
+                            <% } else if (order.status === 'shipped') { %>
+                                <span style="color: #666; font-size: 0.8rem;">📦 Sedang Dikirim</span>
+                            <% } else { %>
+                                <span style="color: #999; font-size: 0.8rem;">Closed</span>
+                            <% } %>
                         </td>
+
                     </tr>
                 <% }) %>
             </tbody>

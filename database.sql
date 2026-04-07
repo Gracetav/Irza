@@ -24,7 +24,7 @@ CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     total_price DECIMAL(15, 2) NOT NULL,
-    status ENUM('pending', 'confirmed', 'rejected') DEFAULT 'pending',
+    status ENUM('pending', 'confirmed', 'rejected', 'shipped') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -43,7 +43,7 @@ CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
     proof VARCHAR(255) NOT NULL,
-    status ENUM('pending', 'confirmed', 'rejected') DEFAULT 'pending',
+    status ENUM('pending', 'confirmed', 'rejected', 'shipped') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );

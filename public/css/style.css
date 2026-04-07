@@ -184,6 +184,8 @@ table th {
 .badge-pending { background-color: #ffc107; }
 .badge-confirmed { background-color: #28a745; }
 .badge-rejected { background-color: #dc3545; }
+.badge-shipped { background-color: #007bff; }
+
 
 /* Dashboard Grid */
 .dashboard-grid {
