@@ -1,0 +1,37 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+    <h2>My Orders</h2>
+    <p style="margin-bottom: 2rem;">Track your sparepart orders here.</p>
+
+    <% if (orders.length === 0) { %>
+        <p>No orders found. <a href="/" style="color: #007bff;">Shop now</a></p>
+    <% } else { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order Date</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach(order => { %>
+                    <tr>
+                        <td><%= new Date(order.created_at).toLocaleDateString() %></td>
+                        <td>Rp <%= order.total_price.toLocaleString('id-ID') %></td>
+                        <td>
+                            <span class="badge badge-<%= order.status %>"><%= order.status %></span>
+                        </td>
+                        <td>
+                            <a href="/order-status/<%= order.id %>" style="color: #007bff;">View details</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>

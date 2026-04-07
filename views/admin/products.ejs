@@ -1,0 +1,58 @@
+<%- include('../partials/header') %>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+    <div class="card">
+        <h3>Add New Product</h3>
+        <p style="margin-bottom: 1rem; color: #666;">Enter sparepart details below.</p>
+        <form action="/admin/products/add" method="POST" enctype="multipart/form-data">
+            <label for="name">Product Name</label>
+            <input type="text" name="name" id="name" required placeholder="Ex: Velg Racing">
+
+            <label for="price">Price (Rp)</label>
+            <input type="number" name="price" id="price" required placeholder="0">
+
+            <label for="stock">Stock</label>
+            <input type="number" name="stock" id="stock" required placeholder="0">
+
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="4"></textarea>
+
+            <label for="image">Product Image</label>
+            <input type="file" name="image" id="image">
+
+            <button type="submit" class="btn-success">Add Product</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Managed Spareparts</h3>
+        <p style="margin-bottom: 2rem; color: #666;">Currently displaying all products in catalog.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(product => { %>
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 1rem;">
+                            <img src="<%= product.image ? '/uploads/products/' + product.image : 'https://dummyimage.com/100x100/ddd/000&text=No+Photo' %>" alt="<%= product.name %>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                            <span><%= product.name %></span>
+                        </td>
+                        <td>Rp <%= product.price.toLocaleString('id-ID') %></td>
+                        <td><%= product.stock %></td>
+                        <td>
+                            <a href="/admin/products/delete/<%= product.id %>" style="color: #dc3545;" onclick="return confirm('Remove this product?')">Delete</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

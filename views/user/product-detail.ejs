@@ -1,0 +1,22 @@
+<%- include('../partials/header') %>
+
+<div class="card" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 300px;">
+        <img src="<%= product.image ? '/uploads/products/' + product.image : 'https://dummyimage.com/400x300/ddd/000&text=No+Photo' %>" alt="<%= product.name %>" style="width: 100%; border-radius: 8px;">
+    </div>
+    <div style="flex: 1.5; min-width: 300px;">
+        <h2><%= product.name %></h2>
+        <p class="product-price" style="font-size: 1.5rem; margin-top: 1rem;">Rp <%= product.price.toLocaleString('id-ID') %></p>
+        <p style="margin: 1rem 0;">Stock: <%= product.stock %> units available</p>
+        <p style="margin-bottom: 2rem;"><%= product.description || 'No description available for this product.' %></p>
+        
+        <form action="/cart/add" method="POST" style="max-width: 300px;">
+            <input type="hidden" name="product_id" value="<%= product.id %>">
+            <label for="qty">Quantity</label>
+            <input type="number" name="qty" id="qty" value="1" min="1" max="<%= product.stock %>" required>
+            <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

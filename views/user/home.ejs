@@ -1,0 +1,66 @@
+<%- include('../partials/header') %>
+
+<!-- Hero Banner (Alternative for Carousel for better stability) -->
+<section class="hero-banner">
+    <div class="hero-content">
+        <h2>Premium Sparepart Motor</h2>
+        <p>Temukan suku cadang berkualitas tinggi untuk performa motor terbaik Anda. Terpercaya, Lengkap, dan Cepat.</p>
+        <a href="#catalog" class="btn" style="background: white; color: #007bff; padding: 1rem 2rem; border-radius: 30px; font-weight: 600; display: inline-block;">Belanja Sekarang</a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-container">
+    <div class="feature-box">
+        <span style="font-size: 3rem;">⚙️</span>
+        <h4>100% Original</h4>
+        <p>Semua sparepart dijamin asli dan berkualitas tinggi.</p>
+    </div>
+    <div class="feature-box">
+        <span style="font-size: 3rem;">🚚</span>
+        <h4>Pengiriman Cepat</h4>
+        <p>Layanan kirim kilat ke seluruh wilayah Indonesia.</p>
+    </div>
+    <div class="feature-box">
+        <span style="font-size: 3rem;">💳</span>
+        <h4>Pembayaran Aman</h4>
+        <p>Berbagai metode pembayaran transfer yang terverifikasi.</p>
+    </div>
+</section>
+
+<!-- Product Catalog -->
+<section id="catalog">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 style="border-left: 5px solid #007bff; padding-left: 1rem;">Katalog Produk</h2>
+        <p style="color: #666;"><%= products.length %> Produk tersedia</p>
+    </div>
+
+    <div class="product-grid">
+        <% if (products.length === 0) { %>
+            <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: white; border-radius: 12px; border: 2px dashed #ddd;">
+                <p style="color: #999; font-size: 1.2rem;">Belum ada produk yang tersedia.</p>
+            </div>
+        <% } %>
+
+        <% products.forEach(product => { %>
+            <div class="product-card">
+                <img src="<%= product.image ? '/uploads/products/' + product.image : 'https://dummyimage.com/250x200/ddd/000&text=No+Photo' %>" alt="<%= product.name %>">
+                <div class="product-info">
+                    <h3 style="margin-bottom: 0.5rem;"><%= product.name %></h3>
+                    <p class="product-price" style="font-size: 1.1rem; margin-bottom: 1rem;">Rp <%= product.price.toLocaleString('id-ID') %></p>
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                        <a href="/product/<%= product.id %>" class="btn btn-detail" style="flex: 1; text-align: center; background: #f0f0f0; color: #333; padding: 0.6rem; border-radius: 4px;">Detail</a>
+                        <form action="/cart/add" method="POST" style="flex: 1; margin: 0;">
+                            <input type="hidden" name="product_id" value="<%= product.id %>">
+                            <input type="hidden" name="qty" value="1">
+                            <button type="submit" style="width: 100%; border-radius: 4px; padding: 0.6rem;">+ Keranjang</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</section>
+
+<%- include('../partials/footer') %>

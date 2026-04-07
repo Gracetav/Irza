@@ -1,0 +1,25 @@
+<%- include('partials/header') %>
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>Welcome Back</h2>
+        <p>Login to your account to shop spareparts.</p>
+    </div>
+    
+    <% if (error) { %>
+        <div class="message-error"><%= error %></div>
+    <% } %>
+
+    <form action="/login" method="POST">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required placeholder="example@mail.com">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required placeholder="********">
+
+        <button type="submit">Login</button>
+    </form>
+    <p style="margin-top: 1rem; text-align: center;">Don't have an account? <a href="/register" style="color: #007bff;">Register here</a></p>
+</div>
+
+<%- include('partials/footer') %>

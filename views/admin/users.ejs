@@ -1,0 +1,39 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2>User Management</h2>
+        <p>Total Customers: <%= users.length %></p>
+    </div>
+
+    <% if (users.length === 0) { %>
+        <p>No customers found.</p>
+    <% } else { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Registered Since</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= new Date(user.created_at).toLocaleDateString() %></td>
+                        <td>
+                            <a href="/admin/users/delete/<%= user.id %>" class="badge badge-rejected" style="color: white;" onclick="return confirm('Delete this user? Product history might be affected.')">Delete User</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>

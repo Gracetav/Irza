@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>Join MotoParts</h2>
+        <p>Register and start shopping spareparts today.</p>
+    </div>
+    
+    <% if (error) { %>
+        <div class="message-error"><%= error %></div>
+    <% } %>
+
+    <form action="/register" method="POST">
+        <label for="name">Full Name</label>
+        <input type="text" name="name" id="name" required placeholder="Your Name">
+
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" required placeholder="example@mail.com">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required placeholder="********">
+
+        <button type="submit">Join Now</button>
+    </form>
+    <p style="margin-top: 1rem; text-align: center;">Already have an account? <a href="/login" style="color: #007bff;">Login here</a></p>
+</div>
+
+<%- include('partials/footer') %>
