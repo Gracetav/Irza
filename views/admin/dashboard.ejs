@@ -1,43 +1,116 @@
 <%- include('../partials/header') %>
 
-<div style="margin-bottom: 2rem;">
-    <h2>Admin Dashboard</h2>
-    <p>Welcome back, Admin. Here is the overview of the store.</p>
-</div>
+<div class="py-10">
+    <!-- Header Section -->
+    <div class="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+            <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Operations Center</h2>
+            <p class="text-gray-500 font-medium">Monitoring your MotoParts ecosystem performance.</p>
+        </div>
+        <div class="flex gap-4">
+            <span class="px-6 py-3 bg-white border border-gray-100 rounded-2xl shadow-sm text-sm font-bold text-gray-600 flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                System Online
+            </span>
+        </div>
+    </div>
 
-<div class="dashboard-grid">
-    <div class="dashboard-card" style="background-color: #007bff;">
-        <h3><%= stats.users %></h3>
-        <p>Total Customers</p>
-    </div>
-    <div class="dashboard-card" style="background-color: #28a745;">
-        <h3><%= stats.products %></h3>
-        <p>Managed Products</p>
-    </div>
-    <div class="dashboard-card" style="background-color: #ffc107;">
-        <h3><%= stats.pending %></h3>
-        <p>Pending Orders</p>
-    </div>
-    <div class="dashboard-card" style="background-color: #17a2b8;">
-        <h3><%= stats.orders %></h3>
-        <p>Total Orders</p>
-    </div>
-</div>
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- New stats card design -->
+        <div class="bg-white p-8 rounded-[32px] shadow-xl shadow-blue-50 border border-gray-50 group hover:scale-[1.02] transition-all duration-300">
+            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            </div>
+            <h3 class="text-4xl font-black text-gray-900 mb-1"><%= stats.users %></h3>
+            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Total Pilots</p>
+        </div>
 
-<div style="margin-top: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-    <div class="card">
-        <h3>Quick Actions</h3>
-        <ul style="list-style: none; margin-top: 1rem;">
-            <li style="margin-bottom: 1rem;"><a href="/admin/products" class="btn" style="display: block; text-align: center; background-color: #007bff; color: white; padding: 0.8rem; border-radius: 4px;">Update Stock / Add Products</a></li>
-            <li style="margin-bottom: 1rem;"><a href="/admin/orders" class="btn" style="display: block; text-align: center; background-color: #ffc107; color: white; padding: 0.8rem; border-radius: 4px;">Confirm Pending Orders</a></li>
-            <li><a href="/admin/users" class="btn" style="display: block; text-align: center; background-color: #dc3545; color: white; padding: 0.8rem; border-radius: 4px;">Manage All Users</a></li>
-        </ul>
+        <div class="bg-white p-8 rounded-[32px] shadow-xl shadow-emerald-50 border border-gray-50 group hover:scale-[1.02] transition-all duration-300">
+            <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+            </div>
+            <h3 class="text-4xl font-black text-gray-900 mb-1"><%= stats.products %></h3>
+            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Inventory Assets</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-[32px] shadow-xl shadow-amber-50 border border-gray-50 group hover:scale-[1.02] transition-all duration-300">
+            <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 last:group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h3 class="text-4xl font-black text-gray-900 mb-1"><%= stats.pending %></h3>
+            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Pending Missions</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-[32px] shadow-xl shadow-indigo-50 border border-gray-50 group hover:scale-[1.02] transition-all duration-300">
+            <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+            </div>
+            <h3 class="text-4xl font-black text-gray-900 mb-1"><%= stats.orders %></h3>
+            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Total History</p>
+        </div>
     </div>
-    <div class="card">
-        <h3>System Status</h3>
-        <p style="margin-top: 1rem;">Running on Node.js + MySQL</p>
-        <p>Database: motoparts_db</p>
-        <p>Time: <%= new Date().toLocaleString() %></p>
+
+    <!-- Actions Section -->
+    <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 bg-white p-10 rounded-[40px] shadow-xl border border-gray-50">
+            <h3 class="text-2xl font-black text-gray-900 mb-8 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Strategic Commands
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="/admin/products" class="group p-6 bg-gray-50 hover:bg-blue-600 rounded-3xl transition-all duration-300">
+                    <p class="text-blue-600 font-black group-hover:text-white mb-2">Inventory Control</p>
+                    <p class="text-xs text-gray-400 group-hover:text-blue-100 font-bold uppercase tracking-tight">Stock Updates & New Assets</p>
+                </a>
+                <a href="/admin/orders" class="group p-6 bg-gray-50 hover:bg-amber-500 rounded-3xl transition-all duration-300">
+                    <p class="text-amber-600 font-black group-hover:text-white mb-2">Order Logistics</p>
+                    <p class="text-xs text-gray-400 group-hover:text-amber-100 font-bold uppercase tracking-tight">Deployment & Confirmations</p>
+                </a>
+                <a href="/admin/users" class="group p-6 bg-gray-50 hover:bg-indigo-600 rounded-3xl transition-all duration-300">
+                    <p class="text-indigo-600 font-black group-hover:text-white mb-2">Pilot Management</p>
+                    <p class="text-xs text-gray-400 group-hover:text-indigo-100 font-bold uppercase tracking-tight">Account Protocols & Access</p>
+                </a>
+                <div class="p-6 bg-blue-50 border-2 border-dashed border-blue-200 rounded-3xl flex items-center justify-center">
+                    <p class="text-blue-400 font-black text-sm uppercase tracking-widest">More Coming Soon</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 p-10 rounded-[40px] shadow-2xl relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 class="text-2xl font-black text-white mb-8">System Analytics</h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                        <span class="text-gray-400 font-bold">Engine</span>
+                        <span class="text-white font-black px-4 py-1 bg-white/10 rounded-full text-xs">Node.js Express</span>
+                    </div>
+                    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                        <span class="text-gray-400 font-bold">Storage</span>
+                        <span class="text-white font-black px-4 py-1 bg-white/10 rounded-full text-xs">MySQL 8.0</span>
+                    </div>
+                    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                        <span class="text-gray-400 font-bold">Local Time</span>
+                        <span class="text-white font-black text-xs"><%= new Date().toLocaleTimeString() %></span>
+                    </div>
+                    <div class="pt-4">
+                        <p class="text-xs text-blue-400 font-black uppercase tracking-[3px]">Premium Dashboard V2.0</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Decorative circle -->
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl"></div>
+        </div>
     </div>
 </div>
 

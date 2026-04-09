@@ -1,66 +1,116 @@
 <%- include('../partials/header') %>
 
-<div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-        <h2>Order Confirmation</h2>
-        <p>Review orders and payment proofs here.</p>
+<div class="py-10">
+    <!-- Header -->
+    <div class="mb-12">
+        <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Mission Log & Deployments</h2>
+        <p class="text-gray-500 font-medium">Verify credentials and initiate component deployment protocols.</p>
     </div>
 
-    <% if (orders.length === 0) { %>
-        <p>No orders found at the moment.</p>
-    <% } else { %>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Customer Name</th>
-                    <th>Total Price</th>
-                    <th>Status</th>
-                    <th>Proof of Payment</th>
-                    <th>Update Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% orders.forEach(order => { %>
-                    <tr>
-                        <td>#<%= order.id %></td>
-                        <td><%= order.user_name %></td>
-                        <td>Rp <%= order.total_price.toLocaleString('id-ID') %></td>
-                        <td>
-                            <span class="badge badge-<%= order.status %>"><%= order.status %></span>
-                        </td>
-                        <td>
-                            <% if (order.proof) { %>
-                                <a href="/uploads/payments/<%= order.proof %>" target="_blank" style="color: #007bff; text-decoration: underline;">View Proof</a>
-                            <% } else { %>
-                                <span style="color: #999;">No Proof Yet</span>
-                            <% } %>
-                        </td>
-                        <td>
-                            <% if (order.status === 'pending') { %>
-                                <form action="/admin/orders/status" method="POST" style="display: flex; gap: 0.5rem; margin: 0;">
-                                    <input type="hidden" name="order_id" value="<%= order.id %>">
-                                    <button type="submit" name="status" value="confirmed" class="btn-success" style="padding: 0.5rem; font-size: 0.8rem;">Confirm</button>
-                                    <button type="submit" name="status" value="rejected" class="btn-danger" style="padding: 0.5rem; font-size: 0.8rem;">Reject</button>
-                                </form>
-                            <% } else if (order.status === 'confirmed') { %>
-                                <form action="/admin/orders/status" method="POST" style="margin: 0;">
-                                    <input type="hidden" name="order_id" value="<%= order.id %>">
-                                    <input type="hidden" name="status" value="shipped">
-                                    <button type="submit" class="btn-success" style="padding: 0.5rem; font-size: 0.8rem; background-color: #007bff;">Barang sudah dikirim</button>
-                                </form>
-                            <% } else if (order.status === 'shipped') { %>
-                                <span style="color: #666; font-size: 0.8rem;">📦 Sedang Dikirim</span>
-                            <% } else { %>
-                                <span style="color: #999; font-size: 0.8rem;">Closed</span>
-                            <% } %>
-                        </td>
-
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
-    <% } %>
+    <div class="bg-white rounded-[40px] shadow-xl border border-gray-50 overflow-hidden">
+        <% if (!orders || orders.length === 0) { %>
+            <div class="p-20 text-center">
+                <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-black text-gray-900">No Orders in Queue</h3>
+                <p class="text-gray-400 mt-2">All missions have been successfully cleared.</p>
+            </div>
+        <% } else { %>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] font-black text-gray-400 uppercase tracking-[3px] border-b border-gray-100 p-8">
+                            <th class="p-8">Identification</th>
+                            <th class="p-8">Pilot Detail</th>
+                            <th class="p-8 text-center">Protocol Status</th>
+                            <th class="p-8 text-center">Credential Evidence</th>
+                            <th class="p-8 text-right">Deployment Command</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        <% orders.forEach(order => { %>
+                            <tr class="group hover:bg-gray-50/50 transition-colors">
+                                <td class="p-8">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center text-white font-black text-xs">
+                                            #<%= order.id %>
+                                        </div>
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest"><%= new Date(order.created_at).toLocaleDateString() %></p>
+                                    </div>
+                                </td>
+                                <td class="p-8">
+                                    <p class="font-black text-gray-900"><%= order.user_name %></p>
+                                    <p class="text-xs text-blue-600 font-bold mt-1">Rp <%= Number(order.total_price).toLocaleString('id-ID') %></p>
+                                </td>
+                                <td class="p-8 text-center">
+                                    <span class="px-4 py-1 text-[10px] font-black uppercase tracking-widest rounded-full border
+                                        <%= order.status === 'confirmed' ? 'bg-green-50 text-green-600 border-green-100' : 
+                                           order.status === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                                           order.status === 'shipped' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                           'bg-gray-50 text-gray-600 border-gray-100' %>">
+                                        <%= order.status %>
+                                    </span>
+                                </td>
+                                <td class="p-8 text-center">
+                                    <% if (order.proof) { %>
+                                        <a href="/uploads/payments/<%= order.proof %>" target="_blank" 
+                                            class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Inspect Data
+                                        </a>
+                                    <% } else { %>
+                                        <span class="text-[10px] text-gray-300 font-black uppercase tracking-widest italic">Awaiting Proof</span>
+                                    <% } %>
+                                </td>
+                                <td class="p-8 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <% if (order.status === 'pending') { %>
+                                            <form action="/admin/orders/status" method="POST" class="flex gap-2">
+                                                <input type="hidden" name="order_id" value="<%= order.id %>">
+                                                <button type="submit" name="status" value="confirmed" 
+                                                    class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-emerald-100/50">
+                                                    Authorize
+                                                </button>
+                                                <button type="submit" name="status" value="rejected" 
+                                                    class="px-4 py-2 bg-rose-100 text-rose-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all">
+                                                    Abort
+                                                </button>
+                                            </form>
+                                        <% } else if (order.status === 'confirmed') { %>
+                                            <form action="/admin/orders/status" method="POST">
+                                                <input type="hidden" name="order_id" value="<%= order.id %>">
+                                                <input type="hidden" name="status" value="shipped">
+                                                <button type="submit" 
+                                                    class="px-6 py-2 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-blue-100/50 flex items-center gap-2">
+                                                    Initiate Delivery
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        <% } else if (order.status === 'shipped') { %>
+                                            <div class="flex items-center gap-2 text-blue-500 font-black text-[10px] uppercase tracking-widest">
+                                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
+                                                Cargo En Route
+                                            </div>
+                                        <% } else { %>
+                                            <span class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Protocol Terminated</span>
+                                        <% } %>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
 </div>
 
 <%- include('../partials/footer') %>

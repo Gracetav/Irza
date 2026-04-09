@@ -1,90 +1,184 @@
 <%- include('../partials/header') %>
 
-<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
-    <div class="card">
-        <h3>Add New Product</h3>
-        <p style="margin-bottom: 1rem; color: #666;">Enter sparepart details below.</p>
-        <form action="/admin/products/add" method="POST" enctype="multipart/form-data">
-            <label for="name">Product Name</label>
-            <input type="text" name="name" id="name" required placeholder="Ex: Velg Racing">
-
-            <label for="price">Price (Rp)</label>
-            <input type="number" name="price" id="price" required placeholder="0">
-
-            <label for="stock">Stock</label>
-            <input type="number" name="stock" id="stock" required placeholder="0">
-
-            <label for="description">Description</label>
-            <textarea name="description" id="description" rows="4"></textarea>
-
-            <label for="image">Product Image</label>
-            <input type="file" name="image" id="image">
-
-            <button type="submit" class="btn-success">Add Product</button>
-        </form>
+<div class="py-10">
+    <!-- Header -->
+    <div class="mb-12">
+        <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Sparepart Inventory</h2>
+        <p class="text-gray-500 font-medium">Add, update, or remove components from your premium catalog.</p>
     </div>
 
-    <div class="card">
-        <h3>Managed Spareparts</h3>
-        <p style="margin-bottom: 2rem; color: #666;">Currently displaying all products in catalog.</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% products.forEach(product => { %>
-                    <tr>
-                        <td style="display: flex; align-items: center; gap: 1rem;">
-                            <img src="<%= product.image ? '/uploads/products/' + product.image : 'https://dummyimage.com/100x100/ddd/000&text=No+Photo' %>" alt="<%= product.name %>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                            <span><%= product.name %></span>
-                        </td>
-                        <td>Rp <%= product.price.toLocaleString('id-ID') %></td>
-                        <td><%= product.stock %></td>
-                        <td>
-                            <button class="btn-success" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background-color: #ffc107;" 
-                                onclick="openEditModal('<%= product.id %>', '<%= product.name %>', '<%= product.price %>', '<%= product.stock %>', `<%= product.description %>`)">
-                                Edit
-                            </button>
-                            <a href="/admin/products/delete/<%= product.id %>" style="color: #dc3545; margin-left: 0.5rem; font-size: 0.8rem;" onclick="return confirm('Remove this product?')">Delete</a>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-10">
+        <!-- Add Product Form -->
+        <div class="bg-white p-10 rounded-[40px] shadow-xl border border-gray-50 h-fit">
+            <h3 class="text-2xl font-black text-gray-900 mb-8 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Deploy New Asset
+            </h3>
+            
+            <form action="/admin/products/add" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <div>
+                    <label for="name" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Label Name</label>
+                    <input type="text" name="name" id="name" required placeholder="Ex: Racing Piston Kit" 
+                        class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl transition-all duration-300 outline-none font-bold text-gray-700">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="price" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Valuation (Rp)</label>
+                        <input type="number" name="price" id="price" required placeholder="0" 
+                            class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl transition-all duration-300 outline-none font-bold text-gray-700">
+                    </div>
+                    <div>
+                        <label for="stock" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Quantity</label>
+                        <input type="number" name="stock" id="stock" required placeholder="0" 
+                            class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl transition-all duration-300 outline-none font-bold text-gray-700">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="description" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Technical Specs</label>
+                    <textarea name="description" id="description" rows="4" 
+                        class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl transition-all duration-300 outline-none font-bold text-gray-700 resize-none" placeholder="Describe component specs..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Visual Evidence</label>
+                    <div class="relative group">
+                        <input type="file" name="image" id="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div class="w-full py-6 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center group-hover:bg-blue-50 group-hover:border-blue-200 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300 group-hover:text-blue-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-blue-400 uppercase tracking-widest">Select Image</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" 
+                    class="w-full py-5 bg-blue-600 hover:bg-black text-white font-extrabold rounded-2xl shadow-xl shadow-blue-200 transition-all duration-500 transform active:scale-95 uppercase tracking-wider text-sm">
+                    Publish to Catalog
+                </button>
+            </form>
+        </div>
+
+        <!-- Inventory List -->
+        <div class="xl:col-span-2 bg-white p-10 rounded-[40px] shadow-xl border border-gray-50">
+            <h3 class="text-2xl font-black text-gray-900 mb-8 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                Current Assets
+            </h3>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-xs font-black text-gray-400 uppercase tracking-[2px] border-b border-gray-100">
+                            <th class="py-6 px-4">Component</th>
+                            <th class="py-6 px-4">Valuation</th>
+                            <th class="py-6 px-4">In Hand</th>
+                            <th class="py-6 px-4 text-center">Protocol</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        <% products.forEach(product => { %>
+                            <tr class="group transition-colors hover:bg-gray-50/50">
+                                <td class="py-6 px-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-14 h-14 bg-gray-50 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group-hover:scale-110 transition-transform duration-300">
+                                            <img src="<%= product.image ? '/uploads/products/' + product.image : 'https://dummyimage.com/200x200/f0f0f0/999&text=N/A' %>" alt="<%= product.name %>" class="w-full h-full object-cover">
+                                        </div>
+                                        <div>
+                                            <p class="font-black text-gray-900"><%= product.name %></p>
+                                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">ID: #<%= product.id %></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-6 px-4 font-black text-blue-600">
+                                    Rp <%= Number(product.price).toLocaleString('id-ID') %>
+                                </td>
+                                <td class="py-6 px-4">
+                                    <span class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-yellow-100">
+                                        <%= product.stock %> units
+                                    </span>
+                                </td>
+                                <td class="py-6 px-4">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button onclick="openEditModal('<%= product.id %>', '<%= product.name %>', '<%= product.price %>', '<%= product.stock %>', `<%= product.description %>`)" 
+                                            class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </button>
+                                        <a href="/admin/products/delete/<%= product.id %>" onclick="return confirm('Initiate deletion protocol?')" 
+                                            class="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-600 hover:text-white transition-all duration-300 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Edit Product Modal -->
-<div id="editModal" style="display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
-    <div class="card" style="width: 400px; margin: auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h3>Edit Product</h3>
-            <button onclick="closeEditModal()" style="background:none; color:#333; font-size:1.5rem; padding:0; line-height:1;">&times;</button>
+<div id="editModal" class="hidden fixed inset-0 z-[2000] bg-black/60 backdrop-blur-sm items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg p-10 rounded-[40px] shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-2xl font-black text-gray-900">Modify Asset</h3>
+            <button onclick="closeEditModal()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
-        <form action="/admin/products/edit" method="POST" enctype="multipart/form-data">
+        
+        <form action="/admin/products/edit" method="POST" enctype="multipart/form-data" class="space-y-6">
             <input type="hidden" name="id" id="edit-id">
             
-            <label for="edit-name">Product Name</label>
-            <input type="text" name="name" id="edit-name" required>
+            <div>
+                <label for="edit-name" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Component Label</label>
+                <input type="text" name="name" id="edit-name" required 
+                    class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl transition-all duration-300 outline-none font-bold text-gray-700">
+            </div>
 
-            <label for="edit-price">Price (Rp)</label>
-            <input type="number" name="price" id="edit-price" required>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="edit-price" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Valuation (Rp)</label>
+                    <input type="number" name="price" id="edit-price" required 
+                        class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl transition-all duration-300 outline-none font-bold text-gray-700">
+                </div>
+                <div>
+                    <label for="edit-stock" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Quantity</label>
+                    <input type="number" name="stock" id="edit-stock" required 
+                        class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl transition-all duration-300 outline-none font-bold text-gray-700">
+                </div>
+            </div>
 
-            <label for="edit-stock">Stock</label>
-            <input type="number" name="stock" id="edit-stock" required>
+            <div>
+                <label for="edit-description" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Technical Specs</label>
+                <textarea name="description" id="edit-description" rows="4" 
+                    class="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl transition-all duration-300 outline-none font-bold text-gray-700 resize-none"></textarea>
+            </div>
 
-            <label for="edit-description">Description</label>
-            <textarea name="description" id="edit-description" rows="4"></textarea>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1 text-amber-600">Asset Visualization</label>
+                <p class="text-[10px] text-gray-400 mb-2 px-1 font-bold italic uppercase tracking-tighter">Optional: Only upload if changing current image.</p>
+                <input type="file" name="image" id="edit-image" class="w-full text-xs text-gray-400 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all">
+            </div>
 
-            <label for="edit-image">Product Image (Leave blank to keep current)</label>
-            <input type="file" name="image" id="edit-image">
-
-            <button type="submit" class="btn-success">Update Product</button>
+            <button type="submit" 
+                class="w-full py-5 bg-indigo-600 hover:bg-black text-white font-extrabold rounded-2xl shadow-xl shadow-indigo-200 transition-all duration-500 transform active:scale-95 uppercase tracking-wider text-sm mt-4">
+                Update Asset Metadata
+            </button>
         </form>
     </div>
 </div>
@@ -96,14 +190,32 @@
         document.getElementById('edit-price').value = price;
         document.getElementById('edit-stock').value = stock;
         document.getElementById('edit-description').value = description;
-        document.getElementById('editModal').style.display = 'flex';
+        
+        const modal = document.getElementById('editModal');
+        const content = document.getElementById('modalContent');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        // Animation
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
     }
 
     function closeEditModal() {
-        document.getElementById('editModal').style.display = 'none';
+        const modal = document.getElementById('editModal');
+        const content = document.getElementById('modalContent');
+        
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 300);
     }
 
-    // Close modal if clicked outside
     window.onclick = function(event) {
         var modal = document.getElementById('editModal');
         if (event.target == modal) {
@@ -113,4 +225,3 @@
 </script>
 
 <%- include('../partials/footer') %>
-

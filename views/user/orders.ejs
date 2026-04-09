@@ -1,36 +1,60 @@
 <%- include('../partials/header') %>
 
-<div class="card">
-    <h2>My Orders</h2>
-    <p style="margin-bottom: 2rem;">Track your sparepart orders here.</p>
+<div class="py-10">
+    <div class="mb-12">
+        <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Deployment History</h2>
+        <p class="text-gray-500 font-medium">Tracking and managing your MotoParts gear acquisitions.</p>
+    </div>
 
-    <% if (orders.length === 0) { %>
-        <p>No orders found. <a href="/" style="color: #007bff;">Shop now</a></p>
+    <% if (!orders || orders.length === 0) { %>
+        <div class="bg-white rounded-[40px] p-20 text-center shadow-xl border border-gray-50">
+            <div class="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+            </div>
+            <h3 class="text-2xl font-black text-gray-900 mb-4">No History Found</h3>
+            <p class="text-gray-400 mb-10 max-w-sm mx-auto">You haven't initiated any deployments yet. Your successful missions will appear here.</p>
+            <a href="/" class="px-8 py-4 bg-gray-900 text-white font-extrabold rounded-2xl hover:bg-blue-600 transition-all duration-300">
+                Initiate First Order
+            </a>
+        </div>
     <% } else { %>
-        <table>
-            <thead>
-                <tr>
-                    <th>Order Date</th>
-                    <th>Total Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% orders.forEach(order => { %>
-                    <tr>
-                        <td><%= new Date(order.created_at).toLocaleDateString() %></td>
-                        <td>Rp <%= order.total_price.toLocaleString('id-ID') %></td>
-                        <td>
-                            <span class="badge badge-<%= order.status %>"><%= order.status %></span>
-                        </td>
-                        <td>
-                            <a href="/order-status/<%= order.id %>" style="color: #007bff;">View details</a>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <% orders.forEach(order => { %>
+                <div class="bg-white p-8 rounded-[40px] shadow-sm border border-gray-50 hover:shadow-xl hover:shadow-blue-50/50 transition-all duration-500 flex flex-col group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-300 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                        </div>
+                        <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full border
+                            <%= order.status === 'confirmed' ? 'bg-green-50 text-green-600 border-green-100' : 
+                               order.status === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                               order.status === 'shipped' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                               'bg-gray-50 text-gray-600 border-gray-100' %>">
+                            <%= order.status %>
+                        </span>
+                    </div>
+
+                    <div class="flex-grow">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[2px] mb-2">Order #<%= order.id %></p>
+                        <h4 class="text-2xl font-black text-gray-900 mb-2">Rp <%= Number(order.total_price).toLocaleString('id-ID') %></h4>
+                        <p class="text-sm text-gray-500 font-medium">Deployed on <%= new Date(order.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) %></p>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-50 flex items-center justify-between">
+                        <a href="/order-status/<%= order.id %>" class="text-xs font-black text-blue-600 uppercase tracking-widest hover:text-black transition-colors flex items-center gap-2">
+                            View Logistics
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
     <% } %>
 </div>
 
