@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title><%= typeof title !== 'undefined' ? title : 'MotoParts Store' %></title>
     <link rel="stylesheet" href="/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1><a href="/">MotoParts Store</a></h1>
+        <h1><a href="/">MotoParts</a></h1>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <% if (user) { %>
+                <li><a href="/">Catalog</a></li>
+                <% if (typeof user !== 'undefined' && user) { %>
                     <% if (user.role === 'admin') { %>
                         <li><a href="/admin">Dashboard</a></li>
-                        <li><a href="/admin/products">Manage Products</a></li>
-                        <li><a href="/admin/users">Manage Users</a></li>
-                        <li><a href="/admin/orders">Confirm Orders</a></li>
+                        <li><a href="/admin/products">Admin Parts</a></li>
+                        <li><a href="/admin/orders">Requests</a></li>
                     <% } else { %>
-                        <li><a href="/cart">Cart (<%= cartCount %>)</a></li>
-                        <li><a href="/orders">My Orders</a></li>
+                        <li><a href="/cart">Bag (<%= typeof cartCount !== 'undefined' ? cartCount : 0 %>)</a></li>
+                        <li><a href="/orders">My Gear</a></li>
                     <% } %>
-                    <li><a href="/logout">Logout (<%= user.name %>)</a></li>
+                    <li><a href="/logout" style="background: #eee; padding: 0.5rem 1.2rem; border-radius: 12px; margin-left: 1rem;">Exit</a></li>
                 <% } else { %>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login" style="background: var(--primary); color: white; padding: 0.7rem 1.8rem; border-radius: 14px; margin-left: 1rem;">Login</a></li>
                 <% } %>
             </ul>
         </nav>
